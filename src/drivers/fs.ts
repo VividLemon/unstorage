@@ -21,6 +21,7 @@ import {
 
 export interface FSStorageOptions {
   base?: string;
+  ext?: string;
   ignore?: string[];
   readOnly?: boolean;
   noClear?: boolean;
@@ -61,6 +62,7 @@ const driver: DriverFactory<FSStorageOptions> = (userOptions = {}) => {
   }
 
   const base = resolve(userOptions.base);
+  const ext = resolve(userOptions.ext);
 
   const ignorePatterns = userOptions.ignore || ["**/node_modules/**", "**/.git/**"];
   const ignore = (path: string) => {
@@ -80,7 +82,7 @@ const driver: DriverFactory<FSStorageOptions> = (userOptions = {}) => {
         `Invalid key: ${JSON.stringify(key)}. It should not contain .. segments`,
       );
     }
-    const resolved = join(base, key.replace(/:/g, "/"));
+    const resolved = join(base, `${key.replace(/:/g, "/")}${ext || ''}`);
     return resolved;
   };
 
